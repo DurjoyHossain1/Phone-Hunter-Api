@@ -10,15 +10,27 @@ const loadPhone = async (serchInput=12) => {
 
 
 const loadPhoneData = (data) => {
-    console.log(data);
+    console.log(data.length);
 
+  // if deta.length gatter then 12 then Show The Show All button
+  const showAll = document.getElementById('showAll-Container');
+
+  if (data.length > 12) {
+    showAll.classList.remove('hidden')
+  }else{
+    showAll.classList.add('hidden')
+  }
+
+
+  // Only 12 Values Allow
+   data = data.slice(0,12);
     //cardContainer.innerText = ''
     //cardContainer.innerHTML = ''
     cardContainer.textContent = ''
     data.forEach((phone) => {
         console.log(phone);
         const cardPhone = document.createElement('div');
-        cardPhone.className = 'card w-96 bg-base-100 shadow-xl p-8 border border-[#CFCFCF]';
+        cardPhone.className = 'card md:w-96 bg-base-100 shadow-xl p-8 border border-[#CFCFCF]';
         cardPhone.innerHTML = `  
         <figure>
          <img src="${phone.image}" alt="Mobile" />
