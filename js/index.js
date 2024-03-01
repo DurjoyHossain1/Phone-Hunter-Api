@@ -1,34 +1,40 @@
 const cardContainer = document.getElementById('card-container');
 
-const loadPhone = async (serchInput=12) => {
+const loadPhone = async (serchInput=12,isShowAll) => {
     const res = await fetch(`https://openapi.programming-hero.com/api/phones?search=${serchInput}`);
     const json = await res.json();
    const data = json.data;
 
-   loadPhoneData(data)
+   loadPhoneData(data,isShowAll)
 }
 
 
-const loadPhoneData = (data) => {
-    console.log(data.length);
+const loadPhoneData = (data,isShowAll) => {
+    //console.log(data.length);
 
   // if deta.length gatter then 12 then Show The Show All button
   const showAll = document.getElementById('showAll-Container');
 
-  if (data.length > 12) {
+  if (data.length > 12 && !isShowAll) {
     showAll.classList.remove('hidden')
   }else{
     showAll.classList.add('hidden')
   }
 
-
+  
   // Only 12 Values Allow
-   data = data.slice(0,12);
+  
+  if (!isShowAll) {
+    data = data.slice(0,12)
+  }
+
+
     //cardContainer.innerText = ''
     //cardContainer.innerHTML = ''
     cardContainer.textContent = ''
+
+
     data.forEach((phone) => {
-        console.log(phone);
         const cardPhone = document.createElement('div');
         cardPhone.className = 'card md:w-96 bg-base-100 shadow-xl p-8 border border-[#CFCFCF]';
         cardPhone.innerHTML = `  
@@ -43,13 +49,28 @@ const loadPhoneData = (data) => {
           </div>
         </div>`
         cardContainer.appendChild(cardPhone)
-    })
+    });
+    loadSpiner(false)
 } 
 
-const handelSerch = () => {
+const handelSerch = (isShowAll) => {
+  loadSpiner(true)
    const serchInput = document.getElementById('serch-input').value;
-  
-   loadPhone(serchInput);
+   loadPhone(serchInput,isShowAll);
+}
+
+const loadSpiner = (isLoding) => {
+  const loadSpinerConainer = document.getElementById('loding-spiner');
+  if (isLoding) {
+    loadSpinerConainer.classList.remove('hidden');
+  }else{
+    loadSpinerConainer.classList.add('hidden');
+  }
+}
+
+const handelShowAll = () => {
+  //const showAllContainer = document.getElementById('showAll-Container');
+  handelSerch(true);
 }
 
 //loadPhone()
