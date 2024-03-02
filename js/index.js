@@ -5,13 +5,20 @@ const loadPhone = async (serchInput=12,isShowAll) => {
     const json = await res.json();
     const data = json.data;
 
+    const errorMassage = document.getElementById('error-massage')
+      if (data.length === 0) {
+        errorMassage.innerText = "Something is wrong can't find any item ";
+        errorMassage.classList.remove('hidden')
+      }else{
+        errorMassage.classList.add('hidden');
+      }
+    
    loadPhoneData(data,isShowAll)
 }
 
 
 const loadPhoneData = (data,isShowAll) => {
     
-
   // if deta.length gatter then 12 then Show The Show All button
   const showAll = document.getElementById('showAll-Container');
 
@@ -21,9 +28,7 @@ const loadPhoneData = (data,isShowAll) => {
     showAll.classList.add('hidden')
   }
 
-  
   // Only 12 Values Allow
-  
   if (!isShowAll) {
     data = data.slice(0,12)
   }
@@ -52,11 +57,13 @@ const loadPhoneData = (data,isShowAll) => {
     loadSpiner(false)
 } 
 
-const handelSerch = (isShowAll) => {
-  loadSpiner(true)
-   const serchInput = document.getElementById('serch-input').value;
-   loadPhone(serchInput,isShowAll);
-}
+  const handelSerch = (isShowAll) => {
+    loadSpiner(true)
+    const serchInput = document.getElementById('serch-input').value;
+    loadPhone(serchInput,isShowAll);
+
+   
+  }
 
 const loadSpiner = (isLoding) => {
   const loadSpinerConainer = document.getElementById('loding-spiner');
