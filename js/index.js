@@ -3,14 +3,14 @@ const cardContainer = document.getElementById('card-container');
 const loadPhone = async (serchInput=12,isShowAll) => {
     const res = await fetch(`https://openapi.programming-hero.com/api/phones?search=${serchInput}`);
     const json = await res.json();
-   const data = json.data;
+    const data = json.data;
 
    loadPhoneData(data,isShowAll)
 }
 
 
 const loadPhoneData = (data,isShowAll) => {
-    //console.log(data.length);
+    
 
   // if deta.length gatter then 12 then Show The Show All button
   const showAll = document.getElementById('showAll-Container');
@@ -28,7 +28,6 @@ const loadPhoneData = (data,isShowAll) => {
     data = data.slice(0,12)
   }
 
-
     //cardContainer.innerText = ''
     //cardContainer.innerHTML = ''
     cardContainer.textContent = ''
@@ -45,7 +44,7 @@ const loadPhoneData = (data,isShowAll) => {
           <h2 class="text-center font-bold text-2xl">${phone.phone_name}</h2>
           <p class="text-center mt-4">There are many variations of passages of available, but the majority have suffered</p>
           <div class="card-actions mx-auto">
-            <button class="btn btn-primary mt-4 text-xl font-semibold">Show Details</button>
+            <button  onclick="loadDetails('${phone.slug}')" class="btn btn-primary mt-4 text-xl font-semibold">Show Details</button>
           </div>
         </div>`
         cardContainer.appendChild(cardPhone)
@@ -68,9 +67,34 @@ const loadSpiner = (isLoding) => {
   }
 }
 
+const loadDetails = async (id) => {
+  const res = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
+  const json = await res.json()
+  const data = json.data;
+  console.log(data);
+
+  const showDetailsContainer = document.getElementById('show-details-container')
+  showDetailsContainer.innerHTML = `
+    <div class=" w-full text-center mb-8">
+      <img class="text-center mx-auto" src="${data?.image}" alt="" />
+    </div>
+    <h2 class="text-2xl font-bold mb-3">${data?.name}</h2>
+    <p class="mb-3">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+    <h2 class="mb-3"><span class="font-bold ">Display Size :</span> ${data?.mainFeatures?.displaySize}</h2>
+    <h2 class="mb-3"><span class="font-bold ">Chipset :</span> ${data?.mainFeatures?.chipSet}</h2>
+    <h2 class="mb-3"><span class="font-bold ">Memory :</span> ${data?.mainFeatures?.memory}</h2>
+    <h2 class="mb-3"><span class="font-bold ">Slug :</span> ${data?.slug}</h2>
+    <h2 class="mb-3"><span class="font-bold ">Release data : </span> ${data?.releaseDate}</h2>
+    <h2 class="mb-3"><span class="font-bold ">Brand :</span> ${data?.brand}</h2>
+    <h2 class="mb-3"><span class="font-bold ">GPS : </span> ${data?.others?.GPS}</h2>
+  
+  `
+
+  my_details_modal.showModal()
+}
+
 const handelShowAll = () => {
-  //const showAllContainer = document.getElementById('showAll-Container');
   handelSerch(true);
 }
 
-//loadPhone()
+loadPhone()
